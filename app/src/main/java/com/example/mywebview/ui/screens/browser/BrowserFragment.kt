@@ -9,12 +9,13 @@ import android.webkit.WebBackForwardList
 import android.webkit.WebView
 import androidx.fragment.app.Fragment
 import com.example.mywebview.App
+import com.example.mywebview.IOnBackPressed
 import com.example.mywebview.R
 import com.example.mywebview.data.model.HistoryItem
 import com.example.mywebview.domain.BrowserClient
 import com.example.mywebview.domain.HistoryManager
 
-class BrowserFragment : Fragment() {
+class BrowserFragment : Fragment(), IOnBackPressed {
 
     private lateinit var webView: WebView
     private val handler = Handler(Looper.getMainLooper())
@@ -67,4 +68,14 @@ class BrowserFragment : Fragment() {
             }
         })
     }
+
+    override fun onBackPressed(): Boolean {
+        if (webView.canGoBack()) {
+            webView.goBack();
+            return true;
+        } else {
+            return false;
+        }
+    }
+
 }

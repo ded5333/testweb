@@ -1,5 +1,6 @@
 package com.example.mywebview.ui
 
+import android.R
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.PackageManager
@@ -10,10 +11,11 @@ import android.os.Bundle
 import android.util.Base64
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.appsflyer.AppsFlyerLib
 import com.example.mywebview.App
-import com.example.mywebview.R
+import com.example.mywebview.IOnBackPressed
 import com.example.mywebview.domain.NetworkStateManager
 import com.example.mywebview.ui.screens.browser.BrowserFragment
 import com.example.mywebview.ui.screens.nonetwork.NoNetworkFragment
@@ -31,7 +33,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(com.example.mywebview.R.layout.activity_main)
 
 
 
@@ -51,8 +53,10 @@ class MainActivity : AppCompatActivity() {
                 md.update(signature.toByteArray())
                 Log.d("KeyHash:", Base64.encodeToString(md.digest(), Base64.DEFAULT))
             }
-        } catch (e: PackageManager.NameNotFoundException) {
-        } catch (e: NoSuchAlgorithmException) {
+
+           } catch (e: PackageManager.NameNotFoundException) {
+
+           } catch (e: NoSuchAlgorithmException) {
         }
 
         isAgree = App.preferencesManager.isSave()
@@ -129,6 +133,15 @@ class MainActivity : AppCompatActivity() {
             return networkInfo.isConnected
         }
     }
+
+    override fun onBackPressed() {
+        val fragment: Fragment? = supportFragmentManager.findFragmentById(com.example.mywebview.R.id.navContainer)
+        if (fragment !is IOnBackPressed || !(fragment as IOnBackPressed?)!!.onBackPressed()) {
+            super.onBackPressed()
+        }
+    }
+
+
 
 
 }
